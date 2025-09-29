@@ -9,17 +9,6 @@ collections:
   - name: "inicio"
     label: "Texto de Inicio"
     files:
-      - label: "Introducción"backend:
-  name: git-gateway
-  branch: main
-
-media_folder: "images"
-public_folder: "/images"
-
-collections:
-  - name: "inicio"
-    label: "Texto de Inicio"
-    files:
       - label: "Introducción"
         name: "intro"
         file: "content/inicio.md"
@@ -34,7 +23,7 @@ collections:
     fields:
       - { label: "Nombre", name: "nombre", widget: "string" }
       - { label: "Imagen", name: "imagen", widget: "image" }
-      - { label: "Descripción", name: "body", widget: "markdown" }
+      - { label: "Descripción", name: "descripcion", widget: "markdown" }
       - { label: "Instagram", name: "instagram", widget: "string", required: false }
       - { label: "YouTube", name: "youtube", widget: "string", required: false }
       - { label: "Blogspot", name: "blogspot", widget: "string", required: false }
@@ -47,32 +36,4 @@ collections:
     fields:
       - { label: "Título", name: "title", widget: "string" }
       - { label: "Imagen", name: "imagen", widget: "image" }
-      - { label: "Descripción", name: "body", widget: "text" }
-
-        name: "intro"
-        file: "content/inicio.md"
-        fields:
-          - {label: "Texto", name: "body", widget: "markdown"}
-
-  - name: "perfiles"
-    label: "Perfiles"
-    folder: "content/perfiles"
-    create: true
-    slug: "{{slug}}"
-    fields:
-      - {label: "Nombre", name: "nombre", widget: "string"}
-      - {label: "Imagen", name: "imagen", widget: "image"}
-      - {label: "Descripción", name: "descripcion", widget: "markdown"}
-      - {label: "Instagram", name: "instagram", widget: "string", required: false}
-      - {label: "YouTube", name: "youtube", widget: "string", required: false}
-      - {label: "Blogspot", name: "blogspot", widget: "string", required: false}
-
-  - name: "galeria"
-    label: "Galería de Fotos"
-    folder: "content/galeria"
-    create: true
-    slug: "{{slug}}"
-    fields:
-      - {label: "Título", name: "title", widget: "string"}
-      - {label: "Imagen", name: "imagen", widget: "image"}
-      - {label: "Descripción", name: "caption", widget: "text"}
+      - { label: "Descripción", name: "caption", widget: "text" }
