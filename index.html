@@ -41,7 +41,7 @@
   .redes a[href*="youtube"]:hover { color: #FF0000; text-shadow: 0 0 5px #FF0000, 0 0 10px #FF0000; }
   .redes a[href*="blogspot"]:hover { color: #4285F4; text-shadow: 0 0 5px #4285F4, 0 0 10px #4285F4; }
 
-  video { width: 100%; max-width: 700px; border-radius: 10px; }
+  video, audio { width: 100%; max-width: 700px; border-radius: 10px; }
 
   /* Galería */
   .galeria { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; }
@@ -49,7 +49,6 @@
   .galeria div img { width: 100%; border-radius: 10px; object-fit: cover; height: 150px; transition: transform 0.3s, filter 0.3s, box-shadow 0.3s; }
   .galeria div p { font-size: 14px; margin-top: 5px; color: #333; text-align: center; }
 
-  /* Hover dinámico fotos */
   .galeria div:hover img {
     animation: pulse 0.6s ease-in-out;
     box-shadow: 0 0 15px rgba(255,255,255,0.5), 0 0 25px rgba(255,255,255,0.3);
@@ -57,7 +56,6 @@
     filter: brightness(1.2);
   }
 
-  /* Modal para ampliar foto */
   .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; flex-direction: column; padding: 20px; }
   .modal img { max-width: 90%; max-height: 80%; border-radius: 10px; }
   .modal p { color: #fff; text-align: center; margin-top: 10px; font-size: 16px; }
@@ -65,6 +63,32 @@
 
   footer { background-color: #1a1a1a; color: #fff; text-align: center; padding: 15px; font-size: 14px; line-height: 1.5; }
   footer p:last-child { color: #ff4d4d; font-size: 13px; margin-top: 10px; }
+
+  /* Música */
+  .musica {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 20px;
+    background: #111;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    text-align: center;
+    color: #fff;
+  }
+  .musica h2 { margin-bottom: 15px; font-size: 22px; color: #fff; }
+
+  /* Video con comentarios (Giscus) */
+  .video-comentarios {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 20px;
+    background: #111;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    color: #fff;
+  }
+  .video-comentarios h2 { text-align: center; margin-bottom: 15px; }
+  .video-comentarios video { width: 100%; max-width: 700px; border-radius: 10px; display: block; margin: 0 auto 20px auto; }
 
   @media (max-width: 600px) {
     header h1 { font-size: 1.5em; }
@@ -87,7 +111,6 @@
     Aquí encontrarás recuerdos que nos hicieron reír, enseñanzas que nos dejaron huella y anécdotas que vale la pena traer de nuevo al presente.
   </p>
   <hr>
-  <p>...</p>
   <p>
     La idea es simple: detenernos un instante en medio de la rutina, mirar hacia atrás y revivir esos instantes únicos que, aunque hayan quedado en la memoria, siguen teniendo un valor especial. 
     Cada publicación es como abrir una pequeña ventana al tiempo, para recordar...
@@ -119,21 +142,47 @@
     <div class="redes">
       <a target="_blank" href="https://www.instagram.com/jesusortiz7533"><img src="instagram.png" alt="Instagram"> jesusortiz7533</a>
     </div>
-    <p>Hola soy Jesus, de momento no tengo descripción pq me da hueva hacerlaxd</p>
+    <p>Hola Soy Jesus, de momento no tengo descripción pq me da hueva hacerlaxd</p>
   </div>
 </section>
 
-<section>
-  <h2 style="text-align:center;">🎥 Video de Alanis y Valentina :p</h2>
-  <p>Como tal no recuerdo bien ese día, pero aquí les dejo un recuerdo de nuestros últimos días en CCH.</p>
-  <div style="text-align:center;">
-    <video controls>
-      <source src="video1.mp4" type="video/mp4">
-      Tu navegador no soporta la reproducción de videos.
-    </video>
+<!-- Música -->
+<section class="musica">
+  <h2>🎵 Nuestra canción</h2>
+  <audio controls>
+    <source src="cancion.mp3" type="audio/mpeg">
+    Tu navegador no soporta la reproducción de audio.
+  </audio>
+</section>
+
+<!-- Video con comentarios -->
+<section class="video-comentarios">
+  <h2>🎥 Video de Alanis y Valentina :p</h2>
+  <video controls>
+    <source src="video1.mp4" type="video/mp4">
+    Tu navegador no soporta la reproducción de video.
+  </video>
+
+  <!-- Giscus -->
+  <div id="comentarios-giscus">
+    <script src="https://giscus.app/client.js"
+        data-repo="jesusortiiz4-cell/Paginaweb"
+        data-repo-id="235055947"
+        data-category="General"
+        data-category-id="8962032"
+        data-mapping="title"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="dark"
+        data-lang="es"
+        crossorigin="anonymous"
+        async>
+    </script>
   </div>
 </section>
 
+<!-- Galería -->
 <section>
   <h2 style="text-align:center; margin-bottom:20px;">Fotos con amigos en CCH</h2>
   <div class="galeria">
@@ -172,7 +221,7 @@
   </div>
 </section>
 
-<!-- Modal -->
+<!-- Modal fotos -->
 <div class="modal" id="modal">
   <span class="modal-close" id="modal-close">&times;</span>
   <img id="modal-img" src="" alt="">
@@ -204,7 +253,6 @@
     modal.style.display = 'none';
   });
 
-  // Cerrar al hacer clic fuera de la imagen
   modal.addEventListener('click', e => {
     if (e.target === modal) modal.style.display = 'none';
   });
