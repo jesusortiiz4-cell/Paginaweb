@@ -1,0 +1,35 @@
+backend:
+  name: github
+  repo: jesusortiiz4-cell/Paginaweb   # Cambia esto
+  branch: main
+  auth_type: oauth
+  base_url: https://paginaweb-7g1lfylj6-jesus-projects-d9dec870.vercel.app/api/auth
+  auth_endpoint: auth
+  app_id: Iv23li219WgNrf6r2eQT
+
+media_folder: "uploads"
+public_folder: "/uploads"
+
+collections:
+  - name: "perfiles"
+    label: "Perfiles"
+    folder: "data/perfiles"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Nombre", name: "nombre", widget: "string" }
+      - { label: "Descripción", name: "descripcion", widget: "text" }
+      - { label: "Instagram", name: "instagram", widget: "string", required: false }
+      - { label: "YouTube", name: "youtube", widget: "string", required: false }
+      - { label: "Foto de perfil", name: "foto", widget: "image" }
+
+  - name: "galeria"
+    label: "Galería"
+    folder: "data/galeria"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Título", name: "titulo", widget: "string" }
+      - { label: "Descripción", name: "descripcion", widget: "text" }
+      - { label: "Imagen", name: "imagen", widget: "image" }
+
