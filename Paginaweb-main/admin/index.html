@@ -43,7 +43,8 @@
         } catch (e) {
           console.error(e);
         }
-        window.history.replaceState({}, document.title, "/admin/");
+        // Actualizamos la URL después de la redirección
+        window.history.replaceState({}, document.title, "/Paginaweb/admin/index.html");
       }
 
       if (await auth0.isAuthenticated()) {
@@ -51,7 +52,7 @@
         status.innerText = "Autenticado como " + (user.name || user.email || user.sub);
         logoutBtn.style.display = 'inline-block';
         loginBtn.style.display = 'none';
-        // Load Netlify CMS after authentication
+        // Carga Netlify CMS después de autenticación
         loadNetlifyCMS();
       } else {
         status.innerText = "No autenticado. Necesitas iniciar sesión para acceder al CMS.";
@@ -61,18 +62,17 @@
 
       loginBtn.onclick = async () => {
         await auth0.loginWithRedirect({
-          redirect_uri: window.location.origin + '/admin/'
+          redirect_uri: window.location.origin + '/Paginaweb/admin/index.html'
         });
       };
       logoutBtn.onclick = async () => {
         await auth0.logout({
-          returnTo: window.location.origin + '/admin/'
+          returnTo: window.location.origin + '/Paginaweb/admin/index.html'
         });
       };
     })();
 
     function loadNetlifyCMS() {
-      // create script tag to load Netlify CMS
       const cmsRoot = document.getElementById('cms-root');
       cmsRoot.style.display = 'block';
       const script = document.createElement('script');
@@ -85,3 +85,4 @@
     </script>
   </body>
 </html>
+
