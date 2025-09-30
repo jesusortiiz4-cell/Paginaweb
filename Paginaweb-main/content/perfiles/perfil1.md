@@ -1,6 +1,0 @@
-nombre: "Jesus Ortiz"
-imagen: "/images/Perfil1.jpg"
-body: "Hola, soy Jesus. Este es un perfil de ejemplo para probar Netlify CMS."
-instagram: "jesusortiz7533"
-youtube: ""
-blogspot: ""
