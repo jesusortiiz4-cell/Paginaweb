@@ -3,9 +3,9 @@ backend:
   repo: jesusortiiz4-cell/Paginaweb   # Cambia esto
   branch: main
   auth_type: oauth
-  base_url: https://<tu-oauth-backend-vercel-url>
+  base_url: paginaweb-hvlywqri1-jesus-projects-d9dec870.vercel.app
   auth_endpoint: auth
-  app_id: TU_CLIENT_ID_DE_GITHUB
+  app_id: Iv23li219WgNrf6r2eQT
 
 media_folder: "uploads"
 public_folder: "/uploads"
