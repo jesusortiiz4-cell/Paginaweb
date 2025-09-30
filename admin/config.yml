@@ -1,11 +1,11 @@
 backend:
   name: github
-  repo: tu_usuario/tu_repo
+  repo: TU_USUARIO/TU_REPO_WEB   # Cambia esto
   branch: main
   auth_type: oauth
-  base_url: https://tu-backend.com
+  base_url: https://<tu-oauth-backend-vercel-url>
   auth_endpoint: auth
-  app_id: <tu_github_oauth_app_id>
+  app_id: TU_CLIENT_ID_DE_GITHUB
 
 media_folder: "uploads"
 public_folder: "/uploads"
@@ -22,4 +22,14 @@ collections:
       - { label: "Instagram", name: "instagram", widget: "string", required: false }
       - { label: "YouTube", name: "youtube", widget: "string", required: false }
       - { label: "Foto de perfil", name: "foto", widget: "image" }
+
+  - name: "galeria"
+    label: "Galería"
+    folder: "data/galeria"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Título", name: "titulo", widget: "string" }
+      - { label: "Descripción", name: "descripcion", widget: "text" }
+      - { label: "Imagen", name: "imagen", widget: "image" }
 
