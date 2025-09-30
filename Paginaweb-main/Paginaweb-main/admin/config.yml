@@ -2,11 +2,8 @@ backend:
   name: github
   repo: jesusortiiz4-cell/Paginaweb
   branch: main
-  # auth_type removed for Vercel OAuth
-  base_url: ${BASE_URL}
+  base_url: https://paginaweb-sand-five.vercel.app
   auth_endpoint: /api/auth
-  app_id: 2037367
-  base_url: ${BASE_URL}
 
 media_folder: "static/uploads"
 public_folder: "/uploads"
