@@ -4,13 +4,10 @@ backend:
   branch: main
   auth_type: implicit
   app_id: 2037367
-  # URL base apuntando al admin dentro de Paginaweb-main
   base_url: https://jesusortiiz4-cell.github.io/Paginaweb/Paginaweb-main/admin
-  # auth_endpoint comentado porque Auth0 se maneja en frontend
-  # auth_endpoint: /admin/auth
 
-media_folder: "static/uploads" # Carpeta en el repo donde se guardan los archivos subidos
-public_folder: "/uploads"      # Ruta pública desde donde se sirven los archivos
+media_folder: "static/uploads"
+public_folder: "/uploads"
 
 collections:
   - name: "pages"
