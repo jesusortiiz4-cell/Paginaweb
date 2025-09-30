@@ -37,3 +37,4 @@ collections:
       - { label: "Título", name: "title", widget: "string" }
       - { label: "Imagen", name: "imagen", widget: "image" }
       - { label: "Descripción", name: "caption", widget: "text"}
+
