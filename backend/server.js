@@ -9,6 +9,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
+// Variables de entorno
 const {
   CLIENT_ID,
   CLIENT_SECRET,
@@ -18,9 +19,17 @@ const {
   REDIRECT_URI
 } = process.env;
 
-// Ruta para iniciar el proceso OAuth
-app.get('/auth', async (req, res) => {
-  // Aquí podrías redirigir al usuario a Auth0 login si aún no lo está
+if (!CLIENT_ID || !CLIENT_SECRET || !AUTH0_CLIENT_ID || !AUTH0_CLIENT_SECRET || !AUTH0_DOMAIN || !REDIRECT_URI) {
+  console.error("Faltan variables de entorno. Asegúrate de configurar .env correctamente.");
+  process.exit(1);
+}
+
+/**
+ * /auth
+ * Redirige al usuario a Auth0 para que inicie sesión
+ * El CMS redirige al backend con query param `returnTo` opcional.
+ */
+app.get('/auth', (req, res) => {
   const returnTo = req.query.returnTo || '/admin/';
   const authorizeUrl = `https://${AUTH0_DOMAIN}/authorize?` +
     `response_type=code&client_id=${AUTH0_CLIENT_ID}` +
@@ -29,73 +38,95 @@ app.get('/auth', async (req, res) => {
   res.redirect(authorizeUrl);
 });
 
-// Ruta de callback de Auth0 → intercambiar código por token
+/**
+ * /callback
+ * Auth0 redirige aquí luego del login con un `code`
+ * Aquí intercambiamos ese código por tokens en Auth0
+ * Luego generamos un JWT propio y redirigimos al CMS con ese JWT
+ */
 app.get('/callback', async (req, res) => {
   const code = req.query.code;
   const state = req.query.state || '/admin/';
 
   if (!code) {
-    return res.status(400).send('Missing code in callback');
-  }
-
-  // Intercambiar código por token en Auth0
-  const tokenResponse = await fetch(`https://${AUTH0_DOMAIN}/oauth/token`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      grant_type: "authorization_code",
-      client_id: AUTH0_CLIENT_ID,
-      client_secret: AUTH0_CLIENT_SECRET,
-      code: code,
-      redirect_uri: REDIRECT_URI
-    })
-  });
-
-  const tokenData = await tokenResponse.json();
-  if (tokenData.error) {
-    return res.status(500).json(tokenData);
-  }
-
-  // Ahora tienes token de Auth0 (id_token, access_token)
-  const idToken = tokenData.id_token;
-
-  // Puedes verificar el idToken, extraer datos de usuario, etc.
-
-  // Generar un JWT propio para mandar al frontend (CMS)
-  const jwtPayload = {
-    sub: "user:" + Date.now(),  // puedes usar algo más real
-    auth0: tokenData
-  };
-  const cmsToken = jwt.sign(jwtPayload, CLIENT_SECRET, { expiresIn: '1h' });
-
-  // Redirigir al frontend CMS con ese token en fragmento o query
-  // Por ejemplo, redirigir a `/admin/?token=...`
-  res.redirect(`${state}?token=${cmsToken}`);
-});
-
-// Ruta para que CMS intercambie token por credenciales de GitHub
-app.post('/token', async (req, res) => {
-  const { token } = req.body;
-  if (!token) {
-    return res.status(400).json({ error: "No token provided" });
+    return res.status(400).send("Falta el código en la callback de Auth0");
   }
 
   try {
-    const decoded = jwt.verify(token, CLIENT_SECRET);
-    // Aquí podrías verificar que el usuario está autorizado
+    // Intercambio de código por tokens en Auth0
+    const tokenResponse = await fetch(`https://${AUTH0_DOMAIN}/oauth/token`, {
+      method: 'POST',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        grant_type: "authorization_code",
+        client_id: AUTH0_CLIENT_ID,
+        client_secret: AUTH0_CLIENT_SECRET,
+        code: code,
+        redirect_uri: REDIRECT_URI
+      })
+    });
 
-    // Luego intercambiar por credenciales de GitHub (o firma)
-    // **Este paso depende del proveedor OAuth de GitHub** y cómo lo quieras hacer.
-    // Para ejemplo simple:
-    const githubAccessToken = "SIMULATED_GITHUB_TOKEN";
+    const tokenData = await tokenResponse.json();
+    if (tokenData.error) {
+      console.error("Error al obtener tokens de Auth0:", tokenData);
+      return res.status(500).json(tokenData);
+    }
+
+    // Podrías verificar el id_token, por ejemplo con jwt.verify()
+    // Ahora construimos un payload para tu JWT interno
+    const jwtPayload = {
+      auth0: tokenData,  // puedes extraer sólo lo que necesites
+      // puedes agregar info extra como “user”, roles, permisos, etc.
+    };
+
+    // Firmamos el token con CLIENT_SECRET
+    const cmsToken = jwt.sign(jwtPayload, CLIENT_SECRET, { expiresIn: '1h' });
+
+    // Redirigimos de nuevo al CMS con el token
+    res.redirect(`${state}?token=${cmsToken}`);
+  } catch (err) {
+    console.error("Error en /callback:", err);
+    res.status(500).send("Error en el callback de autenticación");
+  }
+});
+
+/**
+ * /token
+ * El CMS (frontend) llama aquí con el JWT interno para obtener acceso a GitHub
+ */
+app.post('/token', async (req, res) => {
+  const { token } = req.body;
+  if (!token) {
+    return res.status(400).json({ error: "No se proporcionó token" });
+  }
+
+  try {
+    // Verificamos el JWT que generaste anteriormente
+    const decoded = jwt.verify(token, CLIENT_SECRET);
+
+    // Aquí podrías verificar que el usuario tenga permisos, etc.
+    // Luego, necesitas intercambiar con GitHub o firmar peticiones
+    // para que CMS pueda modificar el repositorio.
+
+    // Para ejemplo simple, devolvemos un token simulado:
+    const githubAccessToken = "TOKEN_DE_GITHUB_REAL";  // Aquí implementa el intercambio real
+
+    // También se necesita el nombre completo del repo
+    const repo_full_name = "TU_USUARIO/TU_REPO_WEB";
 
     return res.json({
       token: githubAccessToken,
-      repo_full_name: "TU_USUARIO/TU_REPO_WEB"
+      repo_full_name
     });
-  } catch (err) {
-    return res.status(403).json({ error: "Invalid token" });
+  } catch (error) {
+    console.error("Token inválido o expirado:", error);
+    return res.status(403).json({ error: "Token inválido" });
   }
+});
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`OAuth backend corriendo en puerto ${port}`);
 });
 
 const port = process.env.PORT || 3000;
