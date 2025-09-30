@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: TU_USUARIO/TU_REPO_WEB   # Cambia esto
+  repo: jesusortiiz4-cell/Paginaweb   # Cambia esto
   branch: main
   auth_type: oauth
   base_url: https://<tu-oauth-backend-vercel-url>
